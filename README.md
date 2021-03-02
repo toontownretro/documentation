@@ -1,1 +1,3 @@
-Toontown Retro project documentation.
+# Toontown Retro Project Documentation
+
+See the Wiki for the documentation.
