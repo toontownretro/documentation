@@ -11,25 +11,27 @@ In the future, this guide may be split up into different pages for installing sp
 - [Visual Studio 2019](https://visualstudio.microsoft.com/) **OR** [Windows 10 SDK](https://developer.microsoft.com/en-US/windows/downloads/windows-10-sdk)
   - For Visual Studio, make sure you check the option for **Desktop Development with C++**
 - [Strawberry Perl](http://strawberryperl.com/)
-- [FMOD Engine](https://www.fmod.com/download)
-  - Requires an account
-  - Download is inside the FMOD Studio Suite section
 - [Python 3.6 or newer (64-bit version)](https://www.python.org/downloads/)
   - This will be the primary Python interpreter used. 
 - [CMake](https://cmake.org/download/)
 - [Git for Windows](https://git-scm.com/downloads)
-- [Autodesk Maya 2016 or newer](https://www.autodesk.com/)
-  - Requires an account and license
-  - TTMODELS requires Maya to be built
-  - **Make sure you download the correct DevKit version!**
-  - Additionally you need to add ``MAYA_ENABLE_LEGACY_VIEWPORT=1`` to the Maya.env file located in ``C:\Users\%Username%\Documents\maya\20XX`` for TTMODELS to include Vertex Shaders.
-- Autodesk Maya DevKit
-  - [DevKit (Maya 2016)](https://github.com/sonictk/Maya-devkit/tags)
-  - [DevKit (Maya 2019+)](https://www.autodesk.com/developer-network/platform-technologies/maya)
-- MySQL
 - Some good text editor, like [Notepad++](https://notepad-plus-plus.org/downloads) or [Visual Studio Code](https://code.visualstudio.com/)
 - *Optional:* [Jom](https://wiki.qt.io/Jom) as an alternative to msbuild
 - *Optional:* [Clang](https://github.com/llvm/llvm-project/releases) as an alternative to the default Microsoft compiler
+
+## Required Third Party Packages\*
+- [Autodesk Maya 2016 or newer](https://www.autodesk.com/)
+  - Asset pipelines, such as TTMODELS, requires Maya to be built with Panda
+  - Requires an account and license
+  - Additionally you need to add ``MAYA_ENABLE_LEGACY_VIEWPORT=1`` to the Maya.env file located in ``C:\Users\%Username%\Documents\maya\20XX`` for TTMODELS to include Vertex Shaders.
+- Autodesk Maya DevKit
+  - **Make sure you download the correct DevKit version!**
+  - [DevKit (Maya 2016)](https://github.com/sonictk/Maya-devkit/tags)
+  - [DevKit (Maya 2019+)](https://www.autodesk.com/developer-network/platform-technologies/maya)
+- [FMOD Engine](https://www.fmod.com/download)
+  - Requires an account
+  - Download is inside the FMOD Studio Suite section
+
 
 ## Creating The Development Environment
 By default, the workspace will be located at ``C:\Users\%username%\player``
@@ -44,7 +46,7 @@ cd %USERPROFILE%\player
 This tree contains the third-party packages and scripts to bootstrap your environment.
 ```
 cd %USERPROFILE%\player
-git clone [https://github.com/toontownretro/wintools](https://github.com/toontownretro/wintools)
+git clone https://github.com/toontownretro/wintools
 cd wintools\panda
 setup
 ```
@@ -56,8 +58,6 @@ After you've finished running the setup script, look inside your player director
 - The **env.bat** file sets needed environment variables when working in the Toontown Retro environment, similar to .bashrc. One important environment variable is ``%PLAYER%``, which is set to the location of your player directory. You can add extra variables and commands to this file as you see fit.
 - The **Terminal** shortcut launches a console window that automatically pulls in the commands and environment variables from env.bat when you launch it.
 
----
-
 #### Configuring env.bat and Config.pp
 The **env.bat** file is the Batch script that automatically executes when you open the console using the Terminal shortcut. This file requires modifications to reference the correct paths to the Python and Maya installations on your computer. Open this file in a text editor, and correct the lines reading ``set PYTHON_LOCATION=`` and ``set MAYA_LOCATION=`` to the correct paths on your computer. Additionally, you may have to correct the location to the Visual Studio vcvars script, which sets up appropriate environment variables to invoke the Visual C++ compiler.
 
@@ -65,8 +65,6 @@ If you wish to use Clang as default compiler over the Microsoft Visual Studio on
 ``#define USE_COMPILER Clang``
 
 Close your current console, and from now on, **launch the console using the Terminal shortcut.**
-
----
 
 #### Building WINTOOLS
 This builds all of the third-party packages required to build the actual engine. **Note: You should now be using the Terminal console.**
@@ -101,10 +99,12 @@ cd %WINTOOLS%
 python copy_dlls.py
 ```
 
-#### Adding 3rd Party Libraries
+#### Optional: Adding 3rd Party Libraries
 For the **FMOD Sound System**, the ``fmod.dll`` file has to be copied from ``C:\Program Files (x86)\FMOD SoundSystem\Fmod Studio API Windows\api\core\lib\x64`` into the ``%WINTOOLS%\built\bin`` folder.
+  - Toontown depends on this
 
 <write about steam audio here later :) >
+  - tf depends on this
 
 #### Building ppremake
 The rest of the trees rely on the ppremake build system. Before you build the engine, you will need to clone and build ppremake:
@@ -124,10 +124,10 @@ The output of this is an executable named ``ppremake.exe``, found in ``%PPREMAKE
 #### Building DTOOL
 We are now ready to start building the engine, starting with DTOOL. This tree contains low-level code that is needed by the rest of the engine and game trees.
 
-First, clone the DTOOL repository.
+First, clone the DTOOL repository:
 ```
 cd %USERPROFILE%\player
-git clone [https://github.com/toontownretro/dtool](https://github.com/toontownretro/dtool)
+git clone https://github.com/toontownretro/dtool
 ```
 
 Attach to DTOOL, just like you did for WINTOOLS and ppremake:
@@ -141,7 +141,7 @@ cd %DTOOL%
 ppremake
 ```
 
-Finally, build the tree.
+Finally, build the tree:
 ```
 msbuild dtool.sln -m -t:install
 ```
@@ -159,7 +159,7 @@ This tree contains the main part of the engine (graphics, audio, networking, etc
 Preparing PANDA:
 ```
 cd %PLAYER%
-git clone [https://github.com/toontownretro/panda](https://github.com/toontownretro/panda)
+git clone https://github.com/toontownretro/panda
 cta panda
 cd %PANDA%
 ppremake
@@ -174,7 +174,7 @@ msbuild panda.sln -m -t:install
 jom install
 ```
 
-After this completes, you should now have a fully built PANDA tree in %PANDA%\built.
+After this completes, you should now have a fully built PANDA tree in ``%PANDA%\built``.
 
 #### Building PANDATOOL
 This tree contains various command line programs for use with PANDA, such as pview, maya2egg, etc.
@@ -182,7 +182,7 @@ This tree contains various command line programs for use with PANDA, such as pvi
 Preparing PANDATOOL:
 ```
 cd %PLAYER%
-git clone [https://github.com/toontownretro/pandatool](https://github.com/toontownretro/pandatool)
+git clone https://github.com/toontownretro/pandatool
 cta pandatool
 cd %PANDATOOL%
 ppremake
@@ -197,139 +197,126 @@ msbuild pandatool.sln -m -t:install
 jom install
 ```
 
-After this completes, you should now have a fully built PANDATOOL tree in %PANDATOOL%\built. You can verify this by running pview from the command line.
+After this completes, you should now have a fully built PANDATOOL tree in ``%PANDATOOL%\built``. You can verify this by running pview from the command line.
 
 #### Building DIRECT
-
 This tree is a high-level Python interface built on top of PANDA. It contains the code for Actors, DistributedObjects, ShowBase, etc.
+
+Preparing DIRECT:
 ```
-\> cd %PLAYER%
-
-\> git clone [https://github.com/toontownretro/direct](https://github.com/toontownretro/direct)
-
-\> cta direct
-
-\> cd %DIRECT%
-
-\> ppremake
-
-\> msbuild direct.sln -m -t:install **or** jom install
+cd %PLAYER%
+git clone https://github.com/toontownretro/direct
+cta direct
+cd %DIRECT%
+ppremake
 ```
+
+Building DIRECT:
+```
+msbuild pandatool.sln -m -t:install
+```
+*or*
+```
+jom install
+```
+
 #### Building DMODELS
-
 This tree contains various assets used by DIRECT.
+
+Building DIRECT:
 ```
-\> cd %PLAYER%
-
-\> git clone [https://github.com/toontownretro/dmodels](https://github.com/toontownretro/dmodels)
-
-\> cta dmodels
-
-\> cd %DMODELS%
-
-\> ppremake
-
-\> nmake install
+cd %PLAYER%
+git clone https://github.com/toontownretro/dmodels
+cta dmodels
+cd %DMODELS%
+ppremake
+nmake install
 ```
 Note the use of nmake instead of msbuild. msbuild is used to build code trees, while nmake is used to build model/asset trees.
 
 Optionally, rather than nmake install to build DMODELS, you can enter nmake opt-pal. This will use the egg-palettize program in PANDATOOL to place lots of individual textures onto a smaller number of larger textures called palettes, which improves rendering performance. This also applies to TTMODELS.
 
-1. Clone and build OTP
+---
 
+#### Building OTP
 This tree contains code that is shared between Toontown and Pirates, such as the code for name tags.
+
+Preparing OTP:
 ```
-\> cd %PLAYER%
-
-\> git clone [https://github.com/toontownretro/otp](https://github.com/toontownretro/otp)
-
-\> cta otp
-
-\> cd %OTP%
-
-\> ppremake
-
-\> msbuild otp.sln -m -t:install
+cd %PLAYER%
+git clone https://github.com/toontownretro/otp
+cta otp
+cd %OTP%
+ppremake
 ```
+
+Preparing OTP:
+```
+msbuild otp.sln -m -t:install
+```
+*or*
+```
+jom install
+```
+
 #### Building TOONTOWN
-
 This tree contains the actual Toontown game code, both client and server.
 ```
-\> cd %PLAYER%
-
-\> git clone [https://github.com/toontownretro/toontown](https://github.com/toontownretro/toontown)
-
-\> cta toontown
-
-\> cd %TOONTOWN%
-
-\> ppremake
-
-\> msbuild toontown.sln -m -t:install
+cd %PLAYER%
+git clone https://github.com/toontownretro/toontown
+cta toontown
+cd %TOONTOWN%
+ppremake
+msbuild toontown.sln -m -t:install
 ```
-#### Building TTMODELS
 
+#### Building TTMODELS
 This tree contains the Toontown assets. It can take hours to build from scratch (there's a lot of stuff).
 
 The TTMODELS build process relies on a client/server mechanism to convert models out of Maya. This is done to speed up the build process by not having to contact the Maya license server for each model that needs to be converted.
 
 Open a second console using the Terminal shortcut and start the Maya conversion server:
 ```
-\> cta wintools
-
-\> cta dtool
-
-\> cta panda
-
-\> cta pandatool
-
-\> maya2egg\_server
+cta wintools
+cta dtool
+cta panda
+cta pandatool
+maya2egg_server
 ```
-Now, back in the first console, clone and start the TTMODELS build.
+
+Now, back in the first console, clone and start the TTMODELS build:
 ```
-\> cd %PLAYER%
-
-\> git clone [https://github.com/toontownretro/ttmodels](https://github.com/toontownretro/ttmodels)
-
-\> cta ttmodels
-
-\> cd %TTMODELS%
-
-\> ppremake
-
-\> nmake install
+cd %PLAYER%
+git clone https://github.com/toontownretro/ttmodels
+cta ttmodels
+cd %TTMODELS%
+ppremake
+nmake install
 ```
 As noted in the DMODELS step, you can optionally use nmake opt-pal rather than nmake install if you want to build palettes.
 
-After TTMODELS has been built, you need to use a special script
+After TTMODELS has been built, you need to use a special script to remove the ``_language`` references so the game can find all files correctly.
 
-to remove the \_language references so the game can find all files correctly.
-
- Open the Terminal shortcut and use the following command.
+Open the Terminal shortcut and use the following command:
 ```
-\> cd %TTMODELS%\built & %PYTHON\_LOCATION%\python.exe ..\src\strip\_language.py
+cd %TTMODELS%\built & %PYTHON_LOCATION%\python.exe ..\src\strip_language.py
 ```
-By default the script will ask to change all files ending with \_english in their name. If you builtTTMODELS in any other language than English you will need to manually write the language you built it in the Terminal.
+By default the script will ask to change all files ending with ``_english`` in their name. If you built TTMODELS in any other language than English you will need to manually write the language you built it in the Terminal.
 
-1. Clone and build OTP\_SERVER (Optional)
-
+#### Optional: Building the OTP Server
 This tree contains the code for the OTP server in which the client, AI and UD all connect too.
 
 It's a requirement to run and play the game if you're not using Astron.
 ```
-\> cd %PLAYER%
-
-\> git clone [https://github.com/toontownretro/otp\_server](https://github.com/toontownretro/otp_server)
-
-\> cta otp\_server
-
-\> cd %OTP\_SERVER%
-
-\> ppremake
-
-\> msbuild otp\_server.sln -m -t:install
+cd %PLAYER%
+git clone https://github.com/toontownretro/otp_server
+cta otp_server
+cd %OTP_SERVER%
+ppremake
+msbuild otp_server.sln -m -t:install
 ```
-1. Running TOONTOWN and OTP
+
+#### Running TOONTOWN and OTP
 
 After all previous steps were completed the TOONTOWN and OTP trees are ready to be used for running the game.
 
@@ -337,21 +324,18 @@ Open four consoles using the Terminal shortcut and use the following commands, o
 
 If you're using Astron, Enter this command into the first terminal.
 ```
-\> cd astron & astrond config/astrond.yml
+cd astron & astrond config/astrond.yml
 ```
 Otherwise enter this command into the first terminal.
 ```
-\> %PYTHON\_LOCATION%\python.exe -m otp\_server.realtime.main
+%PYTHON_LOCATION%\python.exe -m otp_server.realtime.main
 ```
 Then after starting either Astron as your OTP or the custom OTP we provide, enter these three commands into the three other terminals you started.
 ```
-\> %PYTHON\_LOCATION%\python.exe -m toontown.ai.AIStart
-
-\> %PYTHON\_LOCATION%\python.exe -m toontown.uberdog.Start (OTP)
-
-\> %PYTHON\_LOCATION%\python.exe -m toontown.uberdog.UDStart (Astron)
-
-\> %PYTHON\_LOCATION%\python.exe -m toontown.toonbase.ToontownStart
+%PYTHON_LOCATION%\python.exe -m toontown.ai.AIStart
+%PYTHON_LOCATION%\python.exe -m toontown.uberdog.Start
+%PYTHON_LOCATION%\python.exe -m toontown.uberdog.UDStart
+%PYTHON_LOCATION%\python.exe -m toontown.toonbase.ToontownStart
 ```
 Keep in mind, the pure developer code was from mid 2010 shortly after Victory Parties ended and because of that a lot of the late game content is missing such as, Field Offices, Toon Accessories, M.A.P.S and the Skip Button, which will be added from time to time.
 
