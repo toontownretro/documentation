@@ -1,12 +1,11 @@
 # Toontown Retro Building / Setup Guide
-
-Follow these steps to get everything built and set up on your computer.
-
-Note: A line starting with **\>** is a command you should enter into the console.
+Follow these steps to generate your development environment & main workspace.
+In the future, this guide may be split up into different pages for installing specific programs, such as TOONTOWN.
 
 ## NOTICE
 - In order to build the asset pipeline, ``TTMODELS``, you will need a Autodesk Maya license. If you are currently a student, you can sign up for the free student license.
 - The installation requires you to build modules. Building modules with ``msbuild`` will consume most of your CPU usage, which may cause your computer to freeze during the build process. Libraries such as ``panda`` and ``TTMODELS`` may take more than an hour individually to build.
+- This installation guide is for Windows only.
 
 ## Required Development Tools
 - [Visual Studio 2019](https://visualstudio.microsoft.com/) **OR** [Windows 10 SDK](https://developer.microsoft.com/en-US/windows/downloads/windows-10-sdk)
@@ -25,189 +24,182 @@ Note: A line starting with **\>** is a command you should enter into the console
   - **Make sure you download the correct DevKit version!**
   - Additionally you need to add ``MAYA_ENABLE_LEGACY_VIEWPORT=1`` to the Maya.env file located in ``C:\Users\%Username%\Documents\maya\20XX`` for TTMODELS to include Vertex Shaders.
 - Autodesk Maya DevKit
-  - Devkit (Maya 2016)
-  - [Devkit (Maya 2019+)](https://www.autodesk.com/developer-network/platform-technologies/maya)
+  - [DevKit (Maya 2016)](https://github.com/sonictk/Maya-devkit/tags)
+  - [DevKit (Maya 2019+)](https://www.autodesk.com/developer-network/platform-technologies/maya)
 - MySQL
 - Some good text editor, like [Notepad++](https://notepad-plus-plus.org/downloads) or [Visual Studio Code](https://code.visualstudio.com/)
 - *Optional:* [Jom](https://wiki.qt.io/Jom) as an alternative to msbuild
 - *Optional:* [Clang](https://github.com/llvm/llvm-project/releases) as an alternative to the default Microsoft compiler
 
-● PYTZ (python -m pip install pytz) required for Robot Toon and the Level Editor
-
-● PMW (python -m pip install Pmw) required for Robot Toon and the Level Editor
-
-● ColoredLogs (python -m pip install coloredlogs) required for our custom OTP
-
-● Semidbm (python -m pip install semidbm) required for our custom OTP
-
-● Simplejson (python -m pip install simplejson) required for our custom OTP
-
-● Pyyaml (python -m pip install pyyaml) required for our custom OTP
-
-● Pytoml (python -m pip install pytoml) required for our custom OTP
-
-- Pycryptodome (python -m pip install pycryptodome) required for OTP Authentication
-- PyMysql/
-
-● Compiled Astron (Alternative to our custom OTP)
-
-##### Creating The Development Environment
-This directory is the home for all of the Toontown Retro projects, tools, and repositories.
+## Creating The Development Environment
+By default, the workspace will be located at ``C:\Users\%username%\player``
+This directory is the home for all of the Toontown Retro projects, tools, and repositories. You can pin this folder to Quick Access if you want.
 ```
 mkdir %USERPROFILE%\player
 cd %USERPROFILE%\player
 ```
-The folder will be located at ``C:\Users\%username%\player`` You can pin this folder to Quick Access if you want.
 
-#### Configuring the Setup Environment
-##### Cloning WINTOOLS
+### Configuring the Setup Environment
+#### Cloning WINTOOLS
 This tree contains the third-party packages and scripts to bootstrap your environment.
 ```
 cd %USERPROFILE%\player
 git clone [https://github.com/toontownretro/wintools](https://github.com/toontownretro/wintools)
-```
-
-Run the WINTOOLS setup script:
-```
 cd wintools\panda
 setup
 ```
 
 After you've finished running the setup script, look inside your player directory. You should see a vspec folder, a Config.pp file, a Config.prc file, a env.bat file, and a shortcut named Terminal.
+- The **vspec** folder ontains information required by the "attach" scripts, which you shouldn't have to modify.
+- The **Config.pp** file contains instructions to configure the ppremake build system, such as where to locate the third-party packages. You can add additional instructions to this file to customize your local build.
+- The **Config.prc** file contains runtime configuration variables when running Panda. The variables specified in this file are local to your computer. You can override existing variables or add new variables to this file as you see fit.
+- The **env.bat** file sets needed environment variables when working in the Toontown Retro environment, similar to .bashrc. One important environment variable is ``%PLAYER%``, which is set to the location of your player directory. You can add extra variables and commands to this file as you see fit.
+- The **Terminal** shortcut launches a console window that automatically pulls in the commands and environment variables from env.bat when you launch it.
 
-- The vspec folder contains information required by the "attach" scripts, which you shouldn't have to modify.
-- The Config.pp file contains instructions to configure the ppremake build system, such as where to locate the third-party packages. You can add additional instructions to this file to customize your local build.
-- The Config.prc file contains runtime configuration variables when running Panda. The variables specified in this file are local to your computer. You can override existing variables or add new variables to this file as you see fit.
-- The env.bat file sets needed environment variables when working in the Toontown Retro environment, similar to .bashrc. One important environment variable is %PLAYER%, which is set to the location of your player directory. You can add extra variables and commands to this file as you see fit.
-- And finally, the Terminal shortcut launches a console window that automatically pulls in the commands and environment variables from env.bat when you launch it.
+---
 
-##### Configuring env.bat and Config.pp
-
-The env.bat file is the Batch script that automatically executes when you open the console using the Terminal shortcut. This file requires modifications to reference the correct paths to the Python and Maya installations on your computer. Open this file in a text editor, and correct the lines reading set PYTHON\_LOCATION= and set MAYA\_LOCATION= to the correct paths on your computer. Additionally, you may have to correct the location to the Visual Studio vcvars script, which sets up appropriate environment variables to invoke the Visual C++ compiler.
+#### Configuring env.bat and Config.pp
+The **env.bat** file is the Batch script that automatically executes when you open the console using the Terminal shortcut. This file requires modifications to reference the correct paths to the Python and Maya installations on your computer. Open this file in a text editor, and correct the lines reading ``set PYTHON_LOCATION=`` and ``set MAYA_LOCATION=`` to the correct paths on your computer. Additionally, you may have to correct the location to the Visual Studio vcvars script, which sets up appropriate environment variables to invoke the Visual C++ compiler.
 
 If you wish to use Clang as default compiler over the Microsoft Visual Studio one you will need to edit Config.pp and add the following line for msbuild/jom to respect that setting: 
 ``#define USE_COMPILER Clang``
 
-**Close your current console, and from now on, launch the console using the** Terminal **shortcut.**
+Close your current console, and from now on, **launch the console using the Terminal shortcut.**
 
-1. Build WINTOOLS
+---
 
-This builds all of the third-party packages required to build the actual engine. **Note: You should now be using the** Terminal **console.**
+#### Building WINTOOLS
+This builds all of the third-party packages required to build the actual engine. **Note: You should now be using the Terminal console.**
 
 First, you should attach to WINTOOLS. This adds appropriate variables to your environment that reference folders within WINTOOLS, such as the location of the built third-party packages.
 ```
-\> cta wintools
+cta wintools
 ```
-Attaching to WINTOOLS (or any other tree for that matter) also sets an environment variable with the name of the tree that references the location of the tree. For instance, after attaching, %WINTOOLS% will be defined as C:\Users\\<username\>\player\wintools. Attaching to trees also adds the name of that tree onto another environment variable called %CTPROJS%, which contains a list of all the trees you are attached to. In this case, ``echo %CTPROJS%`` will print WINTOOLS:default. If you are attached to more than one tree, the tree names will be separated with a +. There is another command called ctshowprojs that you can run that will list your current attachments with nicer formatting than directly printing %CTPROJS%.
+Attaching to WINTOOLS (or any other tree for that matter) also sets an environment variable with the name of the tree that references the location of the tree. For instance, after attaching, ``%WINTOOLS%`` will be defined as ``C:\Users\%username%\player\wintools``. 
 
-It is also convenient to place all of your attachment commands in env.bat, so launching the Terminal automatically attaches to the trees you need. I recommend doing that.
+Attaching to trees also adds the name of that tree onto another environment variable called ``%CTPROJS%``, which contains a list of all the trees you are attached to. In this case, ``echo %CTPROJS%`` will print ``WINTOOLS:default``. If you are attached to more than one tree, the tree names will be separated with a ``+`` symbol.
 
-Now, you want to enter the WINTOOLS directory and build the third-party packages.
+There is another command called ``ctshowprojs`` that you can run that will list your current attachments with nicer formatting than directly printing ``%CTPROJS%``.
+
+It is also convenient to place all of your attachment commands in ``env.bat``, so launching the Terminal automatically attaches to the trees you need. It's recommended you do that.
+
+Now, you want to enter the WINTOOLS directory and build the third-party packages:
 ```
-\> cd %WINTOOLS%
-
-\> mkdir build && cd build
-
-\> cmake .. -G "Visual Studio 16 2019" -A x64
-
-\> cmake --build . -j --config RelWithDebInfo
+cd %WINTOOLS%
+mkdir build && cd build
+cmake .. -G "Visual Studio 16 2019" -A x64
+cmake --build . -j --config RelWithDebInfo
 ```
-It will take some time to build, but once it is done, all of the third-party packages will have been built and installed into %WINTOOLS%\built.
+It will take some time to build, but once it is done, all of the third-party packages will have been built and installed into ``%WINTOOLS%\built``.
 
-1. Copy WINTOOLS DLLs
-
+#### Copying WINTOOLS DLLs
 All of the DLLs built by WINTOOLS are expected to be under a single directory, but the build process puts the DLLs for each third-party package in its own directory.
 
+After WINTOOLS is done building, run the following commands:
 ```
-\> cd %WINTOOLS%
- \> python copy\_dlls.py
+cd %WINTOOLS%
+python copy_dlls.py
 ```
 
-For the FMOD Sound System, the fmod.dll file has to be copied from C:\Program Files (x86)\FMOD SoundSystem\Fmod Studio API Windows\api\core\lib\x64 into the %WINTOOLS%\built\bin folder.
+#### Adding 3rd Party Libraries
+For the **FMOD Sound System**, the ``fmod.dll`` file has to be copied from ``C:\Program Files (x86)\FMOD SoundSystem\Fmod Studio API Windows\api\core\lib\x64`` into the ``%WINTOOLS%\built\bin`` folder.
 
-1. Clone and build ppremake
+<write about steam audio here later :) >
 
-The rest of the trees rely on the ppremake build system. Before you build the engine, you will need to clone and build ppremake.
+#### Building ppremake
+The rest of the trees rely on the ppremake build system. Before you build the engine, you will need to clone and build ppremake:
 ```
-\> cd %PLAYER%
-
-\> git clone [https://github.com/toontownretro/ppremake](https://github.com/toontownretro/ppremake)
+cd %PLAYER%
+git clone [https://github.com/toontownretro/ppremake](https://github.com/toontownretro/ppremake)
 ```
-After ppremake has been cloned, attach to it and build it.
+
+After ppremake has been cloned, attach to it and build it:
 ```
-\> cta ppremake
-
-\> cd %PPREMAKE%
-
-\> msbuild ppremake.sln -p:Configuration=Release;Platform=x64
+cta ppremake
+cd %PPREMAKE%
+msbuild ppremake.sln -p:Configuration=Release;Platform=x64
 ```
-The output of this is an executable named ppremake.exe, found in %PPREMAKE%\built\bin.
+The output of this is an executable named ``ppremake.exe``, found in ``%PPREMAKE%\built\bin``.
 
-1. Clone and build DTOOL
-
+#### Building DTOOL
 We are now ready to start building the engine, starting with DTOOL. This tree contains low-level code that is needed by the rest of the engine and game trees.
 
 First, clone the DTOOL repository.
 ```
-\> cd %USERPROFILE%\player
+cd %USERPROFILE%\player
+git clone [https://github.com/toontownretro/dtool](https://github.com/toontownretro/dtool)
+```
 
-\> git clone [https://github.com/toontownretro/dtool](https://github.com/toontownretro/dtool)
+Attach to DTOOL, just like you did for WINTOOLS and ppremake:
 ```
-Attach to DTOOL, just like you did for WINTOOLS and ppremake.
+cta dtool
 ```
-\> cta dtool
-```
-Enter the DTOOL directory and let ppremake generate the scripts to build the tree.
-```
-\> cd %DTOOL%
 
-\> ppremake
+Enter the DTOOL directory and let ppremake generate the scripts to build the tree:
 ```
+cd %DTOOL%
+ppremake
+```
+
 Finally, build the tree.
 ```
-\> msbuild dtool.sln -m -t:install **or** jom install
+msbuild dtool.sln -m -t:install
 ```
-After this completes, you should now have a fully built DTOOL tree in %DTOOL%\built.
+*or*
+```
+jom install
+```
 
+After this completes, you should now have a fully built DTOOL tree in ``%DTOOL%\built``.
 The rest of the trees build in almost the exact same process, so not much more explanation is needed from here on down.
 
-1. Clone and build PANDA
-
+#### Building PANDA
 This tree contains the main part of the engine (graphics, audio, networking, etc). It relies on DTOOL.
+
+Preparing PANDA:
 ```
-\> cd %PLAYER%
-
-\> git clone [https://github.com/toontownretro/panda](https://github.com/toontownretro/panda)
-
-\> cta panda
-
-\> cd %PANDA%
-
-\> ppremake
-
-\> msbuild panda.sln -m -t:install **or** jom install
+cd %PLAYER%
+git clone [https://github.com/toontownretro/panda](https://github.com/toontownretro/panda)
+cta panda
+cd %PANDA%
+ppremake
 ```
+
+Building PANDA:
+```
+msbuild panda.sln -m -t:install
+```
+*or*
+```
+jom install
+```
+
 After this completes, you should now have a fully built PANDA tree in %PANDA%\built.
 
-1. Clone and build PANDATOOL
-
+#### Building PANDATOOL
 This tree contains various command line programs for use with PANDA, such as pview, maya2egg, etc.
+
+Preparing PANDATOOL:
 ```
-\> cd %PLAYER%
-
-\> git clone [https://github.com/toontownretro/pandatool](https://github.com/toontownretro/pandatool)
-
-\> cta pandatool
-
-\> cd %PANDATOOL%
-
-\> ppremake
-
-\> msbuild pandatool.sln -m -t:install **or** jom install
+cd %PLAYER%
+git clone [https://github.com/toontownretro/pandatool](https://github.com/toontownretro/pandatool)
+cta pandatool
+cd %PANDATOOL%
+ppremake
 ```
+
+Building PANDATOOL:
+```
+msbuild pandatool.sln -m -t:install
+```
+*or*
+```
+jom install
+```
+
 After this completes, you should now have a fully built PANDATOOL tree in %PANDATOOL%\built. You can verify this by running pview from the command line.
 
-1. Clone and build DIRECT
+#### Building DIRECT
 
 This tree is a high-level Python interface built on top of PANDA. It contains the code for Actors, DistributedObjects, ShowBase, etc.
 ```
@@ -223,7 +215,7 @@ This tree is a high-level Python interface built on top of PANDA. It contains th
 
 \> msbuild direct.sln -m -t:install **or** jom install
 ```
-1. Clone and build DMODELS
+#### Building DMODELS
 
 This tree contains various assets used by DIRECT.
 ```
@@ -259,7 +251,7 @@ This tree contains code that is shared between Toontown and Pirates, such as the
 
 \> msbuild otp.sln -m -t:install
 ```
-1. Clone and build TOONTOWN
+#### Building TOONTOWN
 
 This tree contains the actual Toontown game code, both client and server.
 ```
@@ -275,7 +267,7 @@ This tree contains the actual Toontown game code, both client and server.
 
 \> msbuild toontown.sln -m -t:install
 ```
-1. Clone and build TTMODELS
+#### Building TTMODELS
 
 This tree contains the Toontown assets. It can take hours to build from scratch (there's a lot of stuff).
 
