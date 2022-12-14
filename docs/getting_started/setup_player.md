@@ -213,7 +213,7 @@ ppremake
 
 Building DIRECT:
 ```
-msbuild pandatool.sln -m -t:install
+msbuild direct.sln -m -t:install
 ```
 *or*
 ```
