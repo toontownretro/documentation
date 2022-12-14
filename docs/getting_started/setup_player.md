@@ -221,9 +221,7 @@ jom install
 ```
 
 #### Building DMODELS
-This tree contains various assets used by DIRECT.
-
-Building DIRECT:
+This tree contains various assets used by DIRECT:
 ```
 cd %PLAYER%
 git clone https://github.com/toontownretro/dmodels
