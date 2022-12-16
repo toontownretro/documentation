@@ -25,4 +25,5 @@ Extensions
 | Name                         | Command                             |
 |------------------------------|-------------------------------------|
 | [TOONTOWN](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_toontown.md#building-toontown) | msbuild toontown.sln -m -t:install |
+| OTP | msbuild otp.sln -m -t:install |
 
