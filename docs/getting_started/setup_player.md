@@ -31,6 +31,8 @@ In the future, this guide may be split up into different pages for installing sp
 - [FMOD Engine](https://www.fmod.com/download)
   - Requires an account
   - Download is inside the FMOD Studio Suite section
+- [Steam Audio Library](https://drive.google.com/file/d/1oPQyUFJ0lk6Jx8vPAHA1USx6hafIe_B7/view?usp=share_link)
+  - Extract the steamaudio folder into the user folder (``C:\Users\%Username%``)
 
 
 ## Creating The Development Environment
@@ -99,12 +101,26 @@ cd %WINTOOLS%
 python copy_dlls.py
 ```
 
-#### Optional: Adding 3rd Party Libraries
+#### Adding 3rd Party Libraries
+Projects have custom dependencies on 3rd party libraries that are required to have installed beforehand.
+
 For the **FMOD Sound System**, the ``fmod.dll`` file has to be copied from ``C:\Program Files (x86)\FMOD SoundSystem\Fmod Studio API Windows\api\core\lib\x64`` into the ``%WINTOOLS%\built\bin`` folder.
   - Toontown depends on this
 
-<write about steam audio here later :) >
-  - tf depends on this
+**Steam Audio** is depended on by both Toontown and Team Fortress.
+- Copy the DLLs from ``C:\Users\%Username%\steamaudio\lib\windows-x64`` into ``wintools/built/bin``.
+- In your local Config.pp file, add the following lines:
+```
+#define STEAM_AUDIO_IPATH $[USERPROFILE]\steamaudio\include
+#define STEAM_AUDIO_LPATH $[USERPROFILE]\steamaudio\lib\windows-x64
+```
+
+For **Autodesk Maya**, configure ``env.bat`` to ensure that the path to Maya (``MAYA_LOCATION``) is correct.
+Example:
+```
+set MAYA_LOCATION=C:\Program Files\Autodesk\Maya2016
+```
+Afterwards, install the DevKit by extracting the contents into your ``MAYA_LOCATION`` directory.
 
 #### Building ppremake
 The rest of the trees rely on the ppremake build system. Before you build the engine, you will need to clone and build ppremake:
@@ -122,7 +138,7 @@ msbuild ppremake.sln -p:Configuration=Release;Platform=x64
 The output of this is an executable named ``ppremake.exe``, found in ``%PPREMAKE%\built\bin``.
 
 #### Building DTOOL
-We are now ready to start building the engine, starting with DTOOL. This tree contains low-level code that is needed by the rest of the engine and game trees.
+DTOOL is the tree that contains low-level code that is needed by the rest of the engine and game trees. Building DTOOL requires for the desired third-party packages to be installed and configured beforehand.
 
 First, clone the DTOOL repository:
 ```
@@ -141,6 +157,12 @@ cd %DTOOL%
 ppremake
 ```
 
+Before building, ensure that your config looks correct:
+![](https://i.imgur.com/Jm5YdVl.png)
+
+If your config is missing a dependency such as Autodesk Maya, view the FAQ [here](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_dtool_faq.md).
+
+
 Finally, build the tree:
 ```
 msbuild dtool.sln -m -t:install
@@ -149,9 +171,6 @@ msbuild dtool.sln -m -t:install
 ```
 jom install
 ```
-
-After this completes, you should now have a fully built DTOOL tree in ``%DTOOL%\built``.
-The rest of the trees build in almost the exact same process, so not much more explanation is needed from here on down.
 
 #### Building PANDA
 This tree contains the main part of the engine (graphics, audio, networking, etc). It relies on DTOOL.
