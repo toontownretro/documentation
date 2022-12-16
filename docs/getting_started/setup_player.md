@@ -30,7 +30,6 @@ In the future, this guide may be split up into different pages for installing sp
   - [DevKit (Maya 2019+)](https://www.autodesk.com/developer-network/platform-technologies/maya)
 - [FMOD Engine](https://www.fmod.com/download)
   - Requires an account
-  - Download is inside the FMOD Studio Suite section
 - [Steam Audio Library](https://drive.google.com/file/d/1oPQyUFJ0lk6Jx8vPAHA1USx6hafIe_B7/view?usp=share_link)
   - Extract the steamaudio folder into the user folder (``C:\Users\%Username%``)
 
