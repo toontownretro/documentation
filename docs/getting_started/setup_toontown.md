@@ -1,10 +1,11 @@
 # Prerequisites
-- finished building otp module
-
+- [Finished installing Player components](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_player.md)
+- Finished installing OTP modules
 
 ## Required Tools
 - MySQL
-- Built Panda with FMOD, Steam audio, and maya support
+- Built Panda with FMOD, Steam Audio, and Maya tools
+- Patience :)
 
 # Building TOONTOWN
 This tree contains the actual Toontown game code, both client and server.
@@ -18,7 +19,7 @@ msbuild toontown.sln -m -t:install
 ```
 
 # Building TTMODELS
-This tree contains the Toontown assets. It can take hours to build from scratch (there's a lot of stuff).
+This tree contains the Toontown assets. **Note:** It can take hours to build from scratch (there's a lot of stuff).
 
 The TTMODELS build process relies on a client/server mechanism to convert models out of Maya. This is done to speed up the build process by not having to contact the Maya license server for each model that needs to be converted.
 
@@ -40,7 +41,7 @@ cd %TTMODELS%
 ppremake
 nmake install
 ```
-As noted in the DMODELS step, you can optionally use nmake opt-pal rather than nmake install if you want to build palettes.
+As noted in the DMODELS step, you can optionally use ``nmake opt-pal`` rather than ``nmake install`` if you want to build palettes.
 
 After TTMODELS has been built, you need to use a special script to remove the ``_language`` references so the game can find all files correctly.
 
