@@ -3,9 +3,11 @@ Follow these steps to generate your development environment & main workspace.
 In the future, this guide may be split up into different pages for installing specific programs, such as TOONTOWN.
 
 ## NOTICE
-- In order to build the asset pipeline, ``TTMODELS``, you will need a Autodesk Maya license. If you are currently a student, you can sign up for the free student license.
+- In order to build the asset pipelines, ``TTMODELS`` and ``PMODELS``, you will need a Autodesk Maya license. If you are currently a student, you can sign up for the free student license.
 - The installation requires you to build modules. Building modules with ``msbuild`` will consume most of your CPU usage, which may cause your computer to freeze during the build process. Libraries such as ``panda`` and ``TTMODELS`` may take more than an hour individually to build.
 - This installation guide is for Windows only.
+- If you wish to play Toontown or Pirates with Astron support, you will need to make changes to ``direct`` in order for Astron to work.
+- As of June 1st 2023, ``WINTOOLS`` installation has been changed - **Config.pp**, **Config.prc**, **env.bat**, **vspec**, and the **Terminal** will install in ``%USERPROFILE%``, the guide will be updated in the future to reflect this change.
 
 ## Required Development Tools
 - [Visual Studio 2019](https://visualstudio.microsoft.com/) **OR** [Windows 10 SDK](https://developer.microsoft.com/en-US/windows/downloads/windows-10-sdk)
@@ -23,7 +25,7 @@ In the future, this guide may be split up into different pages for installing sp
 - [Autodesk Maya 2016 or newer](https://www.autodesk.com/)
   - Asset pipelines, such as TTMODELS, requires Maya to be built with Panda
   - Requires an account and license
-  - Additionally you need to add ``MAYA_ENABLE_LEGACY_VIEWPORT=1`` to the Maya.env file located in ``C:\Users\%Username%\Documents\maya\20XX`` for TTMODELS to include Vertex Shaders.
+  - Additionally, you may need to add ``MAYA_ENABLE_LEGACY_VIEWPORT=1`` to the Maya.env file located in ``C:\Users\%Username%\Documents\maya\20XX`` in order to work with models.
 - Autodesk Maya DevKit
   - **Make sure you download the correct DevKit version!**
   - [DevKit (Maya 2016)](https://github.com/sonictk/Maya-devkit/tags)
@@ -250,9 +252,12 @@ nmake install
 ```
 Note the use of nmake instead of msbuild. msbuild is used to build code trees, while nmake is used to build model/asset trees.
 
-Optionally, rather than nmake install to build DMODELS, you can enter nmake opt-pal. This will use the egg-palettize program in PANDATOOL to place lots of individual textures onto a smaller number of larger textures called palettes, which improves rendering performance. This also applies to TTMODELS.
+Optionally, rather than nmake install to build DMODELS, you can enter nmake opt-pal. This will use the egg-palettize program in PANDATOOL to place lots of individual textures onto a smaller number of larger textures called palettes, which improves rendering performance. This also applies to TTMODELS and PMODELS.
 
 ---
+
+## Optional Steps
+The following steps are only required if you plan on using Toontown or Pirates with the engine.
 
 #### Building OTP
 This tree contains code that is shared between Toontown and Pirates, such as the code for name tags.
@@ -276,12 +281,15 @@ jom install
 ```
 
 #### [Building TOONTOWN](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_toontown.md)
+#### [Building PIRATES](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_pirates.md) TODO
 
 
-#### Optional: Building the OTP Server
+#### Building the OTP Server
 This tree contains the code for the OTP server in which the client, AI and UD all connect too.
 
 It's a requirement to run and play the game if you're not using Astron.
+
+Please note: Currently the OTP Server is only offered in Python so this step can be skipped.
 ```
 cd %PLAYER%
 git clone https://github.com/toontownretro/otp_server
@@ -303,13 +311,13 @@ cd astron & astrond config/astrond.yml
 ```
 Otherwise enter this command into the first terminal.
 ```
-%PYTHON_LOCATION%\python.exe -m otp_server.realtime.main
+%PYTHON_LOCATION%\python.exe -m otp_server.py_otp
 ```
 Then after starting either Astron as your OTP or the custom OTP we provide, enter these three commands into the three other terminals you started.
 ```
 %PYTHON_LOCATION%\python.exe -m toontown.ai.AIStart
-%PYTHON_LOCATION%\python.exe -m toontown.uberdog.Start
-%PYTHON_LOCATION%\python.exe -m toontown.uberdog.UDStart
+%PYTHON_LOCATION%\python.exe -m toontown.uberdog.Start [OTP]
+%PYTHON_LOCATION%\python.exe -m toontown.uberdog.UDStart [Astron]
 %PYTHON_LOCATION%\python.exe -m toontown.toonbase.ToontownStart
 ```
 Keep in mind, the pure developer code was from mid 2010 shortly after Victory Parties ended and because of that a lot of the late game content is missing such as, Field Offices, Toon Accessories, M.A.P.S and the Skip Button, which will be added from time to time.
