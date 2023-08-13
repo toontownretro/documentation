@@ -105,7 +105,7 @@ python copy_dlls.py
 #### Adding 3rd Party Libraries
 Projects have custom dependencies on 3rd party libraries that are required to have installed beforehand.
 
-For the **FMOD Sound System**, the ``fmod.dll`` file has to be copied from ``C:\Program Files (x86)\FMOD SoundSystem\Fmod Studio API Windows\api\core\lib\x64`` into the ``%WINTOOLS%\built\bin`` folder.
+For the **FMOD Sound System**, both ``fmod.dll`` and ``fmodstudio.dll`` have to be copied from ``C:\Program Files (x86)\FMOD SoundSystem\Fmod Studio API Windows\api\core\lib\x64`` and ``C:\Program Files (x86)\FMOD SoundSystem\Fmod Studio API Windows\api\studio\lib\x64`` into the ``%WINTOOLS%\built\bin`` folder.
   - Toontown depends on this
 
 **Steam Audio** is depended on by both Toontown and Team Fortress.
