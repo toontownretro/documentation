@@ -146,6 +146,20 @@ First, clone the DTOOL repository:
 cd %USERPROFILE%\player
 git clone https://github.com/toontownretro/dtool
 ```
+While optional, it is recommended that you add the following lines to Config.pp
+```
+#define USE_MEMORY_MIMALLOC 1
+#define DO_PIPELINING 1
+#define USE_DELETED_CHAIN
+#define HAVE_EIGEN
+#define LINMATH_ALIGN 1
+#define ARCH_FLAGS /arch:AVX2
+#define BUILD_COMPONENTS 1
+#define DONT_COMPOSITE 1
+#define DO_CROSSOBJ_OPT
+#define BUILD_TYPE make
+```
+If you wish to use Visual Studio projects (sln) instead of Makefiles change ``BUILD_TYPE`` from ``make`` to ``msbuild``.
 
 Attach to DTOOL, just like you did for WINTOOLS and ppremake:
 ```
@@ -241,7 +255,16 @@ jom install
 ```
 
 #### Building DMODELS
-This tree contains various assets used by DIRECT:
+This tree contains various assets used by DIRECT and the new shader system:
+
+Before building DMODELS, please add the following lines to your ``Config.prc``
+```
+model-path .
+model-path $DMODELS/src
+```
+This is needed in order for asset pipelines to build the files in the right location.
+
+After that, you can continue like normal.
 ```
 cd %PLAYER%
 git clone https://github.com/toontownretro/dmodels
@@ -250,7 +273,7 @@ cd %DMODELS%
 ppremake
 nmake install
 ```
-Note the use of nmake instead of msbuild. msbuild is used to build code trees, while nmake is used to build model/asset trees.
+Note the use of nmake instead of msbuild. msbuild is used to build code trees, while nmake is used to build model/asset trees. Additionally asset pipelines are not thread safe, so it is advised to only use 1 thread ``-j 1`` or ``-m:1`` on them.
 
 Optionally, rather than nmake install to build DMODELS, you can enter nmake opt-pal. This will use the egg-palettize program in PANDATOOL to place lots of individual textures onto a smaller number of larger textures called palettes, which improves rendering performance. This also applies to TTMODELS and PMODELS.
 
