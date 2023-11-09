@@ -313,6 +313,13 @@ This tree contains the code for the OTP server in which the client, AI and UD al
 It's a requirement to run and play the game if you're not using Astron.
 
 Please note: Currently the OTP Server is only offered in Python so this step can be skipped.
+Additionally you need to install the following pip libraries:
+```
+pip install pycryptodome
+pip install pytz
+pip install semidb
+pip install pymysql
+```
 ```
 cd %PLAYER%
 git clone https://github.com/toontownretro/otp_server
