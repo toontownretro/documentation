@@ -317,7 +317,7 @@ Additionally you need to install the following pip libraries:
 ```
 pip install pycryptodome
 pip install pytz
-pip install semidb
+pip install semidbm
 pip install pymysql
 ```
 ```
