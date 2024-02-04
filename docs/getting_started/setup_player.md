@@ -127,7 +127,7 @@ Afterwards, install the DevKit by extracting the contents into your ``MAYA_LOCAT
 The rest of the trees rely on the ppremake build system. Before you build the engine, you will need to clone and build ppremake:
 ```
 cd %PLAYER%
-git clone [https://github.com/toontownretro/ppremake](https://github.com/toontownretro/ppremake)
+git clone https://github.com/toontownretro/ppremake
 ```
 
 After ppremake has been cloned, attach to it and build it:
@@ -151,7 +151,6 @@ While optional, it is recommended that you add the following lines to Config.pp
 #define USE_MEMORY_MIMALLOC 1
 #define DO_PIPELINING 1
 #define USE_DELETED_CHAIN
-#define HAVE_EIGEN
 #define LINMATH_ALIGN 1
 #define ARCH_FLAGS /arch:AVX2
 #define BUILD_COMPONENTS 1
