@@ -32,7 +32,7 @@ In the future, this guide may be split up into different pages for installing sp
   - [DevKit (Maya 2019+)](https://www.autodesk.com/developer-network/platform-technologies/maya)
 - [FMOD Engine](https://www.fmod.com/download)
   - Requires an account
-- [Steam Audio Library](https://drive.google.com/file/d/1oPQyUFJ0lk6Jx8vPAHA1USx6hafIe_B7/view?usp=share_link)
+- [Steam Audio Library](https://drive.google.com/file/d/1oPQyUFJ0lk6Jx8vPAHA1USx6hafIe_B7/view?usp=share_link) **OUTDATED**
   - Extract the steamaudio folder into the user folder (``C:\Users\%Username%``)
 
 
@@ -99,21 +99,25 @@ All of the DLLs built by WINTOOLS are expected to be under a single directory, b
 After WINTOOLS is done building, run the following commands:
 ```
 cd %WINTOOLS%
+cd built
+mkdir bin
+cd ..
 python copy_dlls.py
 ```
 
 #### Adding 3rd Party Libraries
 Projects have custom dependencies on 3rd party libraries that are required to have installed beforehand.
 
-For the **FMOD Sound System**, both ``fmod.dll`` and ``fmodstudio.dll`` have to be copied from ``C:\Program Files (x86)\FMOD SoundSystem\Fmod Studio API Windows\api\core\lib\x64`` and ``C:\Program Files (x86)\FMOD SoundSystem\Fmod Studio API Windows\api\studio\lib\x64`` into the ``%WINTOOLS%\built\bin`` folder.
+For the **FMOD Sound System**, both ``core`` and ``studio`` folders have to be copied from ``C:\Program Files (x86)\FMOD SoundSystem\Fmod Studio API Windows\api`` into the ``%WINTOOLS%\built\fmod`` folder. The ``inc`` folder needs to be renamed to ``include`` and all ``.lib`` files need to be put out of ``x64`` into the ``lib`` folder. All ``.dll`` files inside ``x64`` need to be put in a new folder inside ``fmod`` called ``bin``.
   - Toontown depends on this
 
 **Steam Audio** is depended on by both Toontown and Team Fortress.
-- Copy the DLLs from ``C:\Users\%Username%\steamaudio\lib\windows-x64`` into ``wintools/built/bin``.
-- In your local Config.pp file, add the following lines:
+- Copy the ``include`` and ``lib`` folders from your compiled Stam Audio folder into ``wintools/built/steamaudio``.
+
+After adding FMOD Sound System and Steam Audio rerun the following commands:
 ```
-#define STEAM_AUDIO_IPATH $[USERPROFILE]\steamaudio\include
-#define STEAM_AUDIO_LPATH $[USERPROFILE]\steamaudio\lib\windows-x64
+cd %WINTOOLS%
+python copy_dlls.py
 ```
 
 For **Autodesk Maya**, configure ``env.bat`` to ensure that the path to Maya (``MAYA_LOCATION``) is correct.
