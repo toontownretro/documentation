@@ -162,6 +162,8 @@ While optional, it is recommended that you add the following lines to Config.pp
 #define DO_CROSSOBJ_OPT
 #define BUILD_TYPE make
 ```
+Depending on your processor you can set ``ARCH_FAGS /arch:`` to ``AVX2`` or ``AVX512``, default is ``AVX``.
+
 If you wish to use Visual Studio projects (sln) instead of Makefiles change ``BUILD_TYPE`` from ``make`` to ``msbuild``.
 
 Attach to DTOOL, just like you did for WINTOOLS and ppremake:
