@@ -13,7 +13,7 @@ In the future, this guide may be split up into different pages for installing sp
 - [Visual Studio 2019](https://visualstudio.microsoft.com/) **OR** [Windows 10 SDK](https://developer.microsoft.com/en-US/windows/downloads/windows-10-sdk)
   - For Visual Studio, make sure you check the option for **Desktop Development with C++**
 - [Strawberry Perl](http://strawberryperl.com/)
-- [Python 3.8 or newer (64-bit version)](https://www.python.org/downloads/)
+- [Python 3.9 or newer (64-bit version)](https://www.python.org/downloads/)
   - This will be the primary Python interpreter used. 
 - [CMake](https://cmake.org/download/)
 - [Git for Windows](https://git-scm.com/downloads)
