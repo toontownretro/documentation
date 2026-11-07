@@ -3,14 +3,14 @@ Follow these steps to generate your development environment & main workspace.
 In the future, this guide may be split up into different pages for installing specific programs, such as TOONTOWN.
 
 ## NOTICE
-- In order to build the asset pipelines, ``TTMODELS`` and ``PMODELS``, you will need a Autodesk Maya license. If you are currently a student, you can sign up for the free student license.
-- The installation requires you to build modules. Building modules with ``msbuild`` will consume most of your CPU usage, which may cause your computer to freeze during the build process. Libraries such as ``panda`` and ``TTMODELS`` may take more than an hour individually to build.
+- In order to build the asset pipelines, ``TTMODELS``, ``PMODELS`` and ``GWMODELS``, you will need a Autodesk Maya license.
+- The installation requires you to build modules. Building modules with ``msbuild`` will consume most of your CPU usage, which may cause your computer to freeze during the build process. Libraries such as ``panda`` and the ``model trunks`` may take more than an hour individually to build.
 - This installation guide is for Windows only.
 - If you wish to play Toontown or Pirates with Astron support, you will need to make changes to ``direct`` in order for Astron to work.
 - As of June 1st 2023, ``WINTOOLS`` installation has been changed - **Config.pp**, **Config.prc**, **env.bat**, **vspec**, and the **Terminal** will install in ``%USERPROFILE%``, the guide will be updated in the future to reflect this change.
 
 ## Required Development Tools
-- [Visual Studio 2019](https://visualstudio.microsoft.com/) **OR** [Windows 10 SDK](https://developer.microsoft.com/en-US/windows/downloads/windows-10-sdk)
+- [Visual Studio 2019](https://visualstudio.microsoft.com/)/[Windows 10 SDK](https://developer.microsoft.com/en-US/windows/downloads/windows-10-sdk) **OR** newer
   - For Visual Studio, make sure you check the option for **Desktop Development with C++**
 - [Strawberry Perl](http://strawberryperl.com/)
 - [Python 3.9 or newer (64-bit version)](https://www.python.org/downloads/)
@@ -22,10 +22,11 @@ In the future, this guide may be split up into different pages for installing sp
 - *Optional:* [Clang](https://github.com/llvm/llvm-project/releases) as an alternative to the default Microsoft compiler
 
 ## Required Third Party Packages\*
-- [Autodesk Maya 2016 or newer](https://www.autodesk.com/)
+- [Autodesk Maya 2016 or newer*](https://www.autodesk.com/)
   - Asset pipelines, such as TTMODELS, requires Maya to be built with Panda
   - Requires an account and license
   - Additionally, you may need to add ``MAYA_ENABLE_LEGACY_VIEWPORT=1`` to the Maya.env file located in ``C:\Users\%Username%\Documents\maya\20XX`` in order to work with models.
+  - *If you wish to contribute to the model repositories Autodesk Maya 2016 will be required.
 - Autodesk Maya DevKit
   - **Make sure you download the correct DevKit version!**
   - [DevKit (Maya 2016)](https://github.com/sonictk/Maya-devkit/tags)
@@ -285,76 +286,12 @@ Optionally, rather than nmake install to build DMODELS, you can enter nmake opt-
 ---
 
 ## Optional Steps
-The following steps are only required if you plan on using Toontown or Pirates with the engine.
+The following steps are only required if you plan on using the VR Studio MMOs with the engine.
 
-#### Building OTP
-This tree contains code that is shared between Toontown and Pirates, such as the code for name tags.
-
-Preparing OTP:
-```
-cd %PLAYER%
-git clone https://github.com/toontownretro/otp
-cta otp
-cd %OTP%
-ppremake
-```
-
-Preparing OTP:
-```
-msbuild otp.sln -m -t:install
-```
-*or*
-```
-jom install
-```
-
+#### [Building OTP SERVER](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_otp_server.md)
+#### [Building OTP](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_otp.md)
 #### [Building TOONTOWN](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_toontown.md)
-#### [Building PIRATES](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_pirates.md) TODO
-
-
-#### Building the OTP Server
-This tree contains the code for the OTP server in which the client, AI and UD all connect too.
-
-It's a requirement to run and play the game if you're not using Astron.
-
-Please note: Currently the OTP Server is only offered in Python so this step can be skipped.
-Additionally you need to install the following pip libraries:
-```
-pip install pycryptodome
-pip install pytz
-pip install semidbm
-pip install pymysql
-```
-```
-cd %PLAYER%
-git clone https://github.com/toontownretro/otp_server
-cta otp_server
-cd %OTP_SERVER%
-ppremake
-msbuild otp_server.sln -m -t:install
-```
-
-#### Running TOONTOWN and OTP
-
-After all previous steps were completed the TOONTOWN and OTP trees are ready to be used for running the game.
-
-Open four consoles using the Terminal shortcut and use the following commands, one for each Terminal.
-
-If you're using Astron, Enter this command into the first terminal.
-```
-cd astron & astrond config/astrond.yml
-```
-Otherwise enter this command into the first terminal.
-```
-%PYTHON_LOCATION%\python.exe -m otp_server.py_otp
-```
-Then after starting either Astron as your OTP or the custom OTP we provide, enter these three commands into the three other terminals you started.
-```
-%PYTHON_LOCATION%\python.exe -m toontown.ai.AIStart
-%PYTHON_LOCATION%\python.exe -m toontown.uberdog.Start [OTP]
-%PYTHON_LOCATION%\python.exe -m toontown.uberdog.UDStart [Astron]
-%PYTHON_LOCATION%\python.exe -m toontown.toonbase.ToontownStart
-```
-Keep in mind, the pure developer code was from mid 2010 shortly after Victory Parties ended and because of that a lot of the late game content is missing such as, Field Offices, Toon Accessories, M.A.P.S and the Skip Button, which will be added from time to time.
-
-Additionally, a lot of the code requires small changes to be compatible with Python 3 which may take time to be updated.
+#### [Building PIRATES](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_pirates.md) [Not planned]
+#### [Building GATEWAY](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_gateway.md) [Not planned]
+#### [Building FAIRIES](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_fairies.md) [Not planned]
+#### [Building CARS](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_cars.md) [Not planned]

@@ -1,21 +1,38 @@
+# TOONTOWN
+This tree contains the actual Toontown game code, both client and server.
+
 # Prerequisites
 - [Finished installing Player components](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_player.md)
-- Finished installing OTP modules
+- [Finished installing the OTP package](https://github.com/toontownretro/documentation/blob/main/docs/getting_started/setup_otp.md)
 
-## Required Tools
-- MySQL
+# Required Tools
 - Built Panda with FMOD, Steam Audio, and Maya tools
 - Patience :)
 
-# Building TOONTOWN
-This tree contains the actual Toontown game code, both client and server.
+# Required Dependencies
+```
+pip install pymysql
+pip install wxPython
+pip install pmw
+pip install pytz
+```
+
+# Preparing TOONTOWN
 ```
 cd %PLAYER%
 git clone https://github.com/toontownretro/toontown
 cta toontown
 cd %TOONTOWN%
 ppremake
+```
+
+# Building TOONTOWN:
+```
 msbuild toontown.sln -m -t:install
+```
+*or*
+```
+jom install
 ```
 
 # Building TTMODELS
@@ -50,3 +67,24 @@ Open the Terminal shortcut and use the following command:
 cd %TTMODELS%\built & %PYTHON_LOCATION%\python.exe ..\src\strip_language.py
 ```
 By default the script will ask to change all files ending with ``_english`` in their name. If you built TTMODELS in any other language than English you will need to manually write the language you built it in the Terminal.
+
+Supported languages include:
+- english
+- castillian
+- japanese
+- german
+- french
+- portuguese
+
+# Running TOONTOWN
+
+After all previous steps were completed the TOONTOWN and OTP trees are ready to be used for running the game.
+
+Open four consoles using the Terminal shortcut and use the following commands, one for each Terminal.
+
+```
+%PYTHON_LOCATION%\python.exe -m otp_server.py_otp
+%PYTHON_LOCATION%\python.exe -m toontown.ai.AIStart
+%PYTHON_LOCATION%\python.exe -m toontown.uberdog.Start
+%PYTHON_LOCATION%\python.exe -m toontown.toonbase.ToontownStart
+```
