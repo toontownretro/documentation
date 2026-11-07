@@ -1,4 +1,4 @@
-#### Building the OTP Server
+# OTP Server
 This tree contains the code for the OTP server in which the client, AI and UD all connect to.
 
 # Prerequisites
